@@ -1,0 +1,68 @@
+# Exemplo do que deve ser o novo estado 0, sendo que o 0 do arquivo de input se torna o estado old_0
+
+0 0 & r was_0
+0 1 & r was_1
+
+was_0 0 0 r was_0
+was_0 1 0 r was_1
+was_0 _ 0 r was_u
+
+was_1 0 1 r was_0
+was_1 1 1 r was_1
+was_1 _ 1 r was_u
+
+was_u _ # l go_back
+
+go_back & & r old_0
+go_back * * l go_back
+
+
+# Exemplo de mudança para a verificação de fim (fazer isso para todos os estados)
+1 1 _ r 2
+1 0 _ r 3
+1 _ _ r 4
+   ||
+   \/
+old_1 # _ r was_old_1
+old_1 1 _ r old_2
+old_1 0 _ r old_3
+old_1 _ _ r old_4
+
+was_old_1 _ # l old_1
+
+# Exemplo de mudança para a verificação de início (fazer isso para todos os estados)
+1 1 _ r 2
+1 0 _ r 3
+1 _ _ r 4
+   ||
+   \/
+old_1 & & r add_u_old_1
+old_1 1 _ r old_2
+old_1 0 _ r old_3
+old_1 _ _ r old_4
+
+add_u_old_1 1 _ r was_1_old_1
+add_u_old_1 0 _ r was_0_old_1
+add_u_old_1 A _ r was_A_old_1  (vai ter que primeiro percorrer o código inteiro para obter as possíveis letras e colocar algo assim para cada uma)
+
+was_1_old_1 0 1 r was_0_old_1
+was_1_old_1 1 1 r was_1_old_1
+was_1_old_1 # 1 r was_#_old_1
+was_1_old_1 A 1 r was_A_old_1  (vai ter que primeiro percorrer o código inteiro para obter as possíveis letras e colocar algo assim para cada uma)
+
+was_0_old_1 0 0 r was_0_old_1
+was_0_old_1 1 0 r was_1_old_1
+was_0_old_1 # 0 r was_#_old_1
+was_0_old_1 A 0 r was_A_old_1  (vai ter que primeiro percorrer o código inteiro para obter as possíveis letras e colocar algo assim para cada uma)
+
+was_A_old_1 0 A r was_0_old_1
+was_A_old_1 1 A r was_1_old_1
+was_A_old_1 # A r was_#_old_1
+was_A_old_1 A A r was_A_old_1  (vai ter que primeiro percorrer o código inteiro para obter as possíveis letras e colocar algo assim para cada uma)
+
+was_#_old_1 _ # l go_back_old_1
+
+go_back_old_1 & & r old_1
+go_back_old_1 * * l go_back_old_1
+
+# Talvez tenha um modo mais bonito de fazer essa verificação de início, mas por enquanto foi isso que consegui pensar
